@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.yamo</groupId>
+        <artifactId>command-dispatch</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath> <!-- lookup parent from repository -->
+    </parent>
+    <groupId>com.yamo</groupId>
+    <artifactId>cd-common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>cd-common</name>
+    <description>公共模块</description>
+    <packaging>pom</packaging>
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+    <modules>
+        <module>cd-common-api</module>
+        <module>cd-common-core</module>
+        <module>cd-common-redis</module>
+        <module>cd-common-log</module>
+        <module>cd-common-rabbitmq</module>
+        <module>cd-common-support</module>
+        <module>cd-common-elasticsearch</module>
+        <module>cd-common-mybatis</module>
+    </modules>
+</project>

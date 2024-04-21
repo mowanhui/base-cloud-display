@@ -1,0 +1,4 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.yamo.cdcommonlog.mq.LogMqSender,\
+com.yamo.cdcommonlog.aspect.LogAspect

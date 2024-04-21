@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamo.cdsysmng.mapper.SysLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yamo.cdsysmng.domain.entity.SysLog">
+        <id column="id" property="id" />
+        <result column="log_id" property="logId" />
+        <result column="log_type" property="logType" />
+        <result column="opt_action" property="optAction" />
+        <result column="log_tag" property="logTag" />
+        <result column="log_source" property="logSource" />
+        <result column="log_category" property="logCategory" />
+        <result column="title" property="title" />
+        <result column="remote_addr" property="remoteAddr" />
+        <result column="user_agent" property="userAgent" />
+        <result column="request_uri" property="requestUri" />
+        <result column="method" property="method" />
+        <result column="params" property="params" />
+        <result column="time" property="time" />
+        <result column="exception" property="exception" />
+        <result column="response" property="response" />
+        <result column="client_id" property="clientId" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_by" property="deleteBy" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="is_deleted" property="isDeleted" />
+    </resultMap>
+    <select id="getList" resultType="com.yamo.cdsysmng.domain.vo.LogVO">
+        select * from T_SYS_LOG
+        where IS_DELETED='0'
+        <if test="search.logType!=null and search.logType!=''">
+            and LOG_TYPE=#{search.logType}
+        </if>
+        <if test="search.optAction!=null and search.optAction!=''">
+            and OPT_ACTION=#{search.optAction}
+        </if>
+        <if test="search.logTag!=null and search.logTag!=''">
+            and LOG_TAG like concat('%',#{search.logTag},'%')
+        </if>
+        <if test="search.logSource!=null and search.logSource!=''">
+            and LOG_SOURCE=#{search.logSource}
+        </if>
+        <if test="search.logCategory!=null and search.logCategory!=''">
+            and LOG_CATEGORY=#{search.logCategory}
+        </if>
+        <if test="search.title!=null and search.title!=''">
+            and TITLE=#{search.title}
+        </if>
+    </select>
+
+</mapper>

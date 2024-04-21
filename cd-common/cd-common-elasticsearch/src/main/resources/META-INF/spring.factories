@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.yamo.cdcommones.utils.EsUtils,\
+com.yamo.cdcommones.config.EsConfigProperties,\
+com.yamo.cdcommones.config.EsConfiguration

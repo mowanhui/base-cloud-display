@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yamo.cdsysmng.mapper.SysDictMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yamo.cdsysmng.domain.entity.SysDict">
+        <id column="id" property="id" />
+        <result column="dict_id" property="dictId" />
+        <result column="parent_id" property="parentId" />
+        <result column="dict_code" property="dictCode" />
+        <result column="dict_name" property="dictName" />
+        <result column="dict_type_code" property="dictTypeCode" />
+        <result column="dict_type_name" property="dictTypeName" />
+        <result column="remark" property="remark" />
+        <result column="sort" property="sort" />
+        <result column="is_enable" property="isEnable" />
+        <result column="create_by" property="createBy" />
+        <result column="create_time" property="createTime" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_time" property="updateTime" />
+        <result column="delete_by" property="deleteBy" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="value1" property="value1" />
+        <result column="value2" property="value2" />
+        <result column="value3" property="value3" />
+    </resultMap>
+    <select id="getDictList" resultType="com.yamo.cdsysmng.domain.vo.DictVO">
+        select dict_id,
+        parent_id,
+        dict_code,
+        dict_name,
+        dict_type_code,
+        dict_type_name,
+        remark,
+        sort,
+        is_enable,
+        value1,
+        value2,
+        value3
+        from t_sys_dict
+        where 1=1
+        and is_deleted='0'
+        and is_enable='1'
+        <if test="searchDict.keyword!='' and searchDict.keyword!=null">
+            and dict_name like concat('%',#{searchDict.keyword},'%')
+        </if>
+        <if test="searchDict.dictTypeCode!='' and searchDict.dictTypeCode!=null">
+            and dict_type_code like concat('%-',#{searchDict.dictTypeCode},'-%')
+        </if>
+        order by sort
+    </select>
+</mapper>

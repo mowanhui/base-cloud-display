@@ -1,0 +1,55 @@
+server:
+  ##端口
+  port: 8892
+##服务名称
+server-name: sys-mng
+##运行环境，dev、prod等等
+profiles-active: @profile.active@
+spring:
+  profiles:
+    active: ${profiles-active}
+  application:
+    ##服务名称
+    name: ${server-name}-${profiles-active}
+  cloud:
+    nacos:
+      ##注册地址
+      server-addr: ${NACOS_ADDR:10.44.52.200:8848}
+      config:
+#        bootstrap:
+#          enable: true
+        ##配置分组（以项目分组）
+        group: cd-${server-name}
+        ##文件后缀名
+        file-extension: yml
+        ##前缀
+        prefix: application
+        ##命名空间（以运行环境区分：测试环境、正式环境）
+        namespace: ${profiles-active}
+        ##是否启用自动刷新
+        refresh-enabled: true
+        ##拓展配置（公共配置文件）
+        extension-configs:
+          ##拓展配置文件
+          - data-id: application-feign.yml
+            #所属分组
+            group: cd-api
+            ##是否刷新
+            refresh: true
+          - data-id: application-common.yml
+            #所属分组
+            group: cd-common
+            ##是否刷新
+            refresh: true
+      ##服务发现配置
+      discovery:
+        ##命名空间
+        namespace: ${profiles-active}
+        ##固定分组
+        group: yamo
+
+
+
+
+
+
