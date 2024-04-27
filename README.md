@@ -1,36 +1,30 @@
 # 运行环境说明
+
 - [ ] 运行环境，请使用**green**环境（dev和prod供给于其他系统使用）
-- [ ] 在maven的setting文件中，配置上公司内网仓库
+- [ ] 在maven的setting文件中，配置阿里云镜像，以加速maven仓库的下载速度
 
 ```
-    <server>
-      <id>yamo-nexus-release</id>
-      <username>admin</username>
-      <password>yamo2021</password>
-    </server>
-    
     <mirror>
-      <id>yamo-nexus-release</id>
-      <mirrorOf>*</mirrorOf>
-      <url>http://10.44.51.23:17081/repository/maven-public/</url>
-      <name>yamo-nexus-release</name>
+      <id>nexus-aliyun</id>
+      <mirrorOf>*,!osgeo,!GeoSolutions,!osgeo-snapshot,!alfresco</mirrorOf>
+      <name>Nexus aliyun</name>
+      <url>https://maven.aliyun.com/nexus/content/groups/public</url>
     </mirror>
 ```
 
-# 共同维护框架说明<br>
-具有开发权限的开发人员，可以对该框架进行优化。需要修改代码，或者添加一些更好的开发工具，可以下载dev分支的代码进行修改。提交代码的时候需要标明、说明自己修改的地方，为什么要修改。提交的代码需要审核，审核通过后，便会合并分支，正式使用。
-
 # 架构概述
-本框架是为了统一公司项目后端开发的代码规范而建设，基于**SpringCloud**微服务而实现。主要目的是为了提高开发人员的工作效率、项目质量，以及缩短新人学习周期。该框架可以下载即用，已经在公司内网中安装了运行环境。请大家，按照以下介绍进行使用，按照规范进行编写自己的业务代码，彼此之间营造出一个美好的开发环境以及规范。
+
+本框架是为了统一公司项目后端开发的代码规范而建设，基于**SpringCloud**
+微服务而实现。主要目的是为了提高开发人员的工作效率、项目质量，以及缩短新人学习周期。该框架可以下载即用，请大家，按照以下介绍进行使用，按照规范进行编写自己的业务代码，彼此之间营造出一个美好的开发环境以及规范。
 
 # 技术架构图
 
 ![avatar](/doc/readme-file/技术架构图.png)
 
-
 # 所用技术及中间件
 
 ## 技术版本
+
 |    所用技术    |       专业名称       |    版本号     |
 |:----------:|:----------------:|:----------:|
 |   开发工具包    |       JDK        |    1.8     |
@@ -48,6 +42,7 @@
 |   达梦数据库    |      Dameng      | 8.1.1.193  |
 
 ## 中间件安装版本
+
 |  组件名称   |     专业名称      |  版本号   |
 |:-------:|:-------------:|:------:|
 |  达梦数据库  |    Dameng     |   V8   |
@@ -59,18 +54,21 @@
 ---
 
 # 框架模块分工
+
 ![avatar](/doc/readme-file/模块分工.png)
 
-
 ## 公共模块【cd-common】
+
 关于项目所有的公共类、公共方法、公共工具都放置于该模块中，该模块的子模块以*cd-common-xx*的格式来命名，例如：cd-common.
 该模块包括6个子模块，分别是：cd-common-core、cd-common-elasticsearch、cd-common-mybatis、cd-common-log、cd-common-redis、cd-common-support.
 
 ## 公共服务调用api模块【cd-common-api】
+
 - [ ] 该模块主要防止公共调用的服务api，例如：一些获取登录认证授权的接口、获取用户信息的接口
 - [ ] 其他模块的服务调用模块，引入本模块，即可生效
 - [ ] 引入方式如下：
-```
+
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -80,10 +78,11 @@
 ```
 
 ### 核心工具模块【cd-common-core】
+
 - [ ] 该模块主要放置一些常用的工具，每一个业务服务都要引入此模块
 - [ ] 引入方式如下：
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -92,13 +91,14 @@
         </dependency>
 ```
 
-### ES工具模块【cd-common-elasticsearch】 
+### ES工具模块【cd-common-elasticsearch】
+
 - [ ] es模块，es的配置以及常用es增删改查操作放置于此模块中.
 - [ ] **EsUtil**类就是常用的es工具类。
 - [ ] 如果业务服务需要用到es，则引入该模块
 - [ ] 引入方式如下：
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -107,17 +107,17 @@
         </dependency>
 ```
 
+### 系统日志模块【cd-common-log】
 
-### 系统日志模块【cd-common-log】 
 - [ ] 系统日志收集，通过使用**LogMqSender**类可发送系统日志到mq中，mq中的日志会在*cd-sys-mng*服务模块中消费，存到数据库中。
 - [ ] 接口调用的日志收集，可使用@***OptLog***和@***OptLogTag***注解
     - @***OptLogTag***：该注解放置于Controller类上，可对每个controller的日志分类
     - @***OptLog***：该注解放置于具体的接口方法上，收集调用接口的信息
 - [ ] 例子如下图：
-![avatar](/doc/readme-file/日志使用说明.png)
+  ![avatar](/doc/readme-file/日志使用说明.png)
 - [ ] 引入方式，如下：
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -127,10 +127,11 @@
 ```
 
 ### Mybatis工具模块
+
 - [ ] 提供分页工具、mybatis的配置以及操作数据库实体类的常用操作
 - [ ] 引入方式，如下:
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -139,12 +140,13 @@
         </dependency>
 ```
 
-### 消息队列模块【cd-common-rabbitmq】 
+### 消息队列模块【cd-common-rabbitmq】
+
 - [ ] 支持多源rabbitmq，可参照*default*或*demo*的例子，实现自定义的多源消息队列
 - [ ] 启用方式：在启动类上加上注解@***EnableDefaultRabbitmq***或@***EnableDemoRabbitmq***
 - [ ] 业务服务模块使用rabbitmq，需要引入该模块，引入如下：
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -153,14 +155,15 @@
         </dependency>
 ```
 
-```
+``` yaml
 ##application.xml引入
 rabbitmq:
   default:
-    host: 10.44.52.200
+    ## mq服务器地址
+    host: XXX.XX.XX.XX
     port: 5672
     username: admin
-    password: pr@123456
+    password: xxxxx
     # 发送者开启 confirm 确认机制
     publisher-confirm-type: CORRELATED
     # 发送者开启 return 确认机制
@@ -182,16 +185,22 @@ rabbitmq:
 ```
 
 ### Redis缓存工具模块
+
 - [ ] 提供redis常用操作的工具以及配置
 - [ ] 通用工具可使用**RedisUtils**
-- [ ] 在这里为了方便管理，在**RedisUtils**的基础上，再次做了一次封装，实现了三种常用的抽象类，分别是：**BaseHashRedis**、**BaseStringRedis**、**BaseStringV2Redis**。目前只实现了哈希和字符串两种存储接口封装，如果需要实现其他数据存储结构，可参考这三个抽象类实现。
+- [ ] 在这里为了方便管理，在**RedisUtils**的基础上，再次做了一次封装，实现了三种常用的抽象类，分别是：**BaseHashRedis**、*
+  *BaseStringRedis**、**BaseStringV2Redis**。目前只实现了哈希和字符串两种存储接口封装，如果需要实现其他数据存储结构，可参考这三个抽象类实现。
 
->  - **BaseHashRedis**：该抽象类为哈希存储类，对于哈希存储的数据，可以创建一个继承它的类，实现重写相关方法即可用，可参考**DictRedis**类
->  - **BaseStringRedis**：该抽象类为字符串存储类，对于固定键存储的数据，可实现一个继承于它的类，实现重写相关方法即可用，可参考**DemoStringRedis**类
->  - **BaseStringV2Redis**：该抽象类为字符串存储类，对于固定键存储的数据，可实现一个继承于它的类，实现重写相关方法即可用，可参考**TokenRedis**、**LoginUserRedis**类
+> - **BaseHashRedis**：该抽象类为哈希存储类，对于哈希存储的数据，可以创建一个继承它的类，实现重写相关方法即可用，可参考*
+    *DictRedis**类
+>  - **BaseStringRedis**：该抽象类为字符串存储类，对于固定键存储的数据，可实现一个继承于它的类，实现重写相关方法即可用，可参考
+     **DemoStringRedis**类
+>  - **BaseStringV2Redis**：该抽象类为字符串存储类，对于固定键存储的数据，可实现一个继承于它的类，实现重写相关方法即可用，可参考
+     **TokenRedis**、**LoginUserRedis**类
+
 - [ ] 实现例子如下：
 
-```
+``` java
 @RequiredArgsConstructor
 @Component
 public class TokenRedis extends BaseStringV2Redis<String> {
@@ -229,9 +238,10 @@ public class TokenRedis extends BaseStringV2Redis<String> {
     }
 }
 ```
+
 - [ ] 引入方式，如下：
 
-```
+``` xml
         <!-- pom.xml引入 -->
         <dependency>
             <groupId>com.yamo</groupId>
@@ -242,7 +252,7 @@ public class TokenRedis extends BaseStringV2Redis<String> {
 
 - [ ] xml配置
 
-```
+``` yaml
 ### application-common.yml
 spring:
   redis:
@@ -260,27 +270,27 @@ spring:
       shutdown-timeout: 100ms
 ```
 
-
 - [ ] <u><font color=red>重点注意</font></u><br>
-如果通用（多服务或模块）的缓存对象，那么就把该对象放在<font color=#FFF033>*com.yamo.cdcommonredis.redisObject*</font>的目录下。如果是项目或模块特有的缓存对象，则放在项目下的<font color=#FFF033>*com.yamo.模块名.redisObject*</font>目录下。
-
-
+  如果通用（多服务或模块）的缓存对象，那么就把该对象放在<font color=#FFF033>*com.yamo.cdcommonredis.redisObject*</font>
+  的目录下。如果是项目或模块特有的缓存对象，则放在项目下的<font color=#FFF033>*com.yamo.模块名.redisObject*</font>目录下。
 
 ### 其他支撑工具模块【cd-common-support】
+
 - [ ] 提供一些支撑业务服务模块的工具，例如：认证校验，异常处理
 - [ ] 统一异常处理，需要在启动类上加上@***EnableyamoControllerResponse***注解
 - [ ] 统一响应体处理，需要在启动类上加上@***EnableyamoControllerResponse***注解
 - [ ] api接口认证处理，需要在启动类上添加@***EnableAuth***注解。使用@***Auth***注解，放置于controller层的mapping方法上即可生效，例子如下：
-![avatar](/doc/readme-file/Auth注解.png)
+  ![avatar](/doc/readme-file/Auth注解.png)
 
 - [ ] <u><font color=red>重点注意</font></u><br>只有使用@***Auth***注解的情况下，才可以通过**RequestUtils**工具获取用户信息
 
 # 服务网关讲解
+
 Gateway网关，使用Ribbon来做负载均衡，继承Knife4j接口文档工具，接入统一用户认证。
 
 ## 路由设置
 
-```
+``` yaml
 ### application-gateway-route.yml
 
 spring:
@@ -303,6 +313,7 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
+      # 路由配置
       routes:
         - id: sys-mng-${profiles-active}
           uri: lb://sys-mng-${profiles-active}
@@ -314,7 +325,7 @@ spring:
 
 ## api文档聚合设置
 
-```
+``` yaml
 #### application-gateway-knife4j.yml
 
 knife4j:
@@ -337,10 +348,11 @@ knife4j:
         order: 1
 ```
 
-## 统一用户中心接入使用
-接入统一用户中心认证，只需要修改以下配置项，分别是*client-id、client-secret、introspection-uri*
+## oauth2认证接入使用
 
-```
+接入oauth2认证，只需要修改以下配置项，分别是*client-id、client-secret、introspection-uri*
+
+``` yaml
 ### application.yml
 spring:
   ##统一用户认证（鉴权）
@@ -353,28 +365,28 @@ spring:
           ##秘钥
           client-secret: zcie5u56n4na7l7bjhbddg7i89foif92u0506b271wr7ktdj1ui84baad2dhxc2z
           ##自省URI
-          introspection-uri: http://68.32.32.140:30001/oauth/check_token
+          introspection-uri: http://{ip}}:{port}/oauth/check_token
 ```
-
-
 
 # 微服务模块使用详解
+
 微服务模块主要由三个模块组成：服务调用模块【api】、业务处理模块【biz】、实体类模块【model】
 
-
 ## 新建模块
+
 新建一个微服务模块（例如*cd-demo*模块），可按照一下步骤进行创建，步骤如下：
+
 1. 克隆*cd-sys-mng*该模块
 2. 修改对应的文件名，如下图所示：
-![avatar](doc/readme-file/修改模块名.png)
+   ![avatar](doc/readme-file/修改模块名.png)
 3. 删除无关文件。除了*config*和*utils*目录下的文件，以及*bootstrap.yml*和*logback-nacos.xml*文件，其他无关的文件的都可删除
 4. 修改*bootstrap.xml*文件，修改如下：
-![avatar](doc/readme-file/bootstrap修改.png)
+   ![avatar](doc/readme-file/bootstrap修改.png)
 5. *pom.xml*修改
-![avatar](doc/readme-file/pom文件修改.png)
+   ![avatar](doc/readme-file/pom文件修改.png)
 6. 在nacos上克隆一份*cd-sys-mng*组的*application.xml*文件，作为*cd-demo*模块的配置文件，并且分组需要改为cd-demo。配置文件信息如下：
 
-```
+``` yaml
 spring:
   datasource:
     dynamic:
@@ -382,8 +394,9 @@ spring:
       datasource:
         master:
           type: com.zaxxer.hikari.HikariDataSource
+          ##达梦数据库配置
           driver-class-name: dm.jdbc.driver.DmDriver
-          url: jdbc:dm://10.44.52.200:5236?schema=SYS_MNG&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
+          url: jdbc:dm://{ip}:5236?schema=SYS_MNG&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8
           username: SYS_MNG
           password: pr@123456
           hikari:
@@ -398,10 +411,10 @@ spring:
 ##rabbitmq配置
 rabbitmq:
   default:
-    host: 10.44.52.200
+    host: {ip}
     port: 5672
     username: admin
-    password: pr@123456
+    password: xxxxx
     # 发送者开启 confirm 确认机制
     publisher-confirm-type: CORRELATED
     # 发送者开启 return 确认机制
@@ -483,15 +496,15 @@ logging:
 
 ```
 
-
-
-
 ## 模块文件结构如下
+
 ![avatar](doc/readme-file/模块详解.png)
 
 ## 请求参数DTO编写规范
+
 - [ ] DTO以接口的形式实现，在接口中创建真正的请求参数实体类
-- [ ] DTO、VO中的在每一个类上加上@***ApiModel***注解，描述清楚该类的作用。同时，每一个参数都应该添加上@***ApiModelProperty***注解，描述清楚该参数的作用以及使用。
+- [ ] DTO、VO中的在每一个类上加上@***ApiModel***注解，描述清楚该类的作用。同时，每一个参数都应该添加上@
+  ***ApiModelProperty***注解，描述清楚该参数的作用以及使用。
 - [ ] Entity需要符合mmybatis-plus的规范
 - [ ] DTO可以使用*springboot2 validation*的工具
 
@@ -514,10 +527,9 @@ logging:
 |     @Pattern(regex=)      |                	被注释的元素必须符合指定的正则表达式                |
 | @URL(protocol=,host,port) | 	检查是否是一个有效的URL，如果提供了protocol,host等，则该URL还需满足提供的条件 |
 
-
 - [ ] 使用例子如下：
 
-```
+``` java
 public interface DictDTO {
     @Data
     @ApiModel(description = "添加字典")
@@ -576,10 +588,11 @@ public interface DictDTO {
 DTO、VO、Entity不要、不要、不要混在一起用（切勿把一个实体类当做DTO、VO、Entity一起用），要把他们分离出来，如果还有一些业务性的实体类，可以新建BO、pojo等等区别。
 
 ## 分页统一处理
+
 - [ ] 分页统一使用***PageUtil.doPage(PageDTO,IService)***方法进行处理
 - [ ] 例子如下:
 
-```
+``` java
     @Override
     public PageVO<DictVO> getDictPage(DictDTO.SearchDictPage searchDictPage) {
         DictDTO.SearchDict searchDict=BeanUtil.toBean(searchDictPage,DictDTO.SearchDict.class);
@@ -590,21 +603,23 @@ DTO、VO、Entity不要、不要、不要混在一起用（切勿把一个实体
 ```
 
 ## 字典回显统一处理工具
+
 - [ ] 该工具主要是为了代码解耦以及方便调用所做的。建议所用到的字典，需要回显都通过该工具做处理
 - [ ] 适用于具体的实体类和JSONObject转化，以及多个字典属性的转化
 - [ ] 实体类模式转化的例子，如下：
-![avatar](doc/readme-file/实体类字典转化.png)
+  ![avatar](doc/readme-file/实体类字典转化.png)
 - [ ] JSON模式转化的例子，如下：
-![avatar](doc/readme-file/json字典转化.png)
+  ![avatar](doc/readme-file/json字典转化.png)
 
 ## 运行环境切换
+
 ![avatar](doc/readme-file/环境切换.png)
 
 # Nacos使用规范
 
 ## bootstrap整合Nacos的配置
 
-```
+``` yaml
 ####### bootstrap.xml
 server:
   ##端口
@@ -658,60 +673,72 @@ spring:
 ```
 
 ## 命名空间
+
 - [ ] 必须设置dev（测试环境）、prod（生产环境）命名空间作为分类，其他特有的命名空间可自定义
 - [ ] 命名空间Id必须与运行环境*profiles.active*一致，因为bootstrap.yml文件已经规范化，不一致会影响正常运行
 - [ ] 效果如下图：
-![avatar](/doc/readme-file/Nacos命名空间.png)
+  ![avatar](/doc/readme-file/Nacos命名空间.png)
 
 ## 配置列表
+
 - [ ] 分组统一以服务名称命名
-- [ ] 一般的项目配置文件都以***application.yml***命名，以服务名称分组，例如：application.yml(分组为cd-gateway)、application.yml(分组为cd-sys-mng).
+- [ ] 一般的项目配置文件都以***application.yml***命名，以服务名称分组，例如：application.yml(分组为cd-gateway)
+  、application.yml(分组为cd-sys-mng).
 - [ ] 必须按照规范设置，因为bootstrap.yml文件已经规范化，不一致会影响正常运行
 - [ ] 效果图如下：
-![avatar](/doc/readme-file/配置列表.png)
+  ![avatar](/doc/readme-file/配置列表.png)
 
 ---
 
 # 其他规范
 
 ## Bean注入统一方式
+
 Bean注入方式，统一使用注解@***RequiredArgsConstructor***，~~丢弃以前使用的注解，例如：@***Autowired***、@***Resource***等等~~
+
 ## 统一异常处理
+
 - [ ] 抛出异常统一使用**BizException**
 - [ ] 不要在方法上直接抛出异常，应当使用try catch捕捉后，进行处理，可以通过使用**BizException**
 - [ ] 使用如下：
 
-```
+``` java
         if (parentDict == null) {
             throw new BizException("父节点不存在");
         }
         //返回响应状态码异常
         throw new BizException(ResultCode.BUSY);
 ```
+
 ## 统一响应返回处理
+
 - [ ] 统一返回数据工具，请使用**ResultVO**，成功返回使用***ResultVO.ok()***,失败返回使用***ResultVO.failed()***
 - [ ] 响应状态码配置，***ResultCode***类中，编写自己的业务响应码
 - [ ] 使用如下：
-![avatar](/doc/readme-file/响应实体类工具.png)
+  ![avatar](/doc/readme-file/响应实体类工具.png)
 
 ## Controller层编写规范
+
 - [ ] 在编写controller类中，不允许把业务代码放置于此，一般来说，在该类中，一个mapping方法体内不超过两行代码。
 - [ ] 一般需要在controller类上添加四个注解，如下所示：
 
-```
+``` java
 @Api(tags = "字典管理") //api文档
 @RestController
 @RequestMapping("/dict")
 @RequiredArgsConstructor //构造器注入注解
-```
+``` 
+
 - [ ] 一般需要在mapping方法上添加两个注解，如下所示
 
-```
+``` java
 @ApiOperation("批量添加字典") //api接口备注
 @PostMapping("addDictList")
 ```
+
 - [ ] 使用如下
-![avatar](/doc/readme-file/controller层规范.png)
+  ![avatar](/doc/readme-file/controller层规范.png)
 
 ## 统一JSON操作工具
+
 对于项目中所需要做json转化和bean转化的处理，统一使用hutool的工具来处理。
